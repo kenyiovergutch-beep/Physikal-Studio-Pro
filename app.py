@@ -258,8 +258,10 @@ elif st.session_state.user_role == "Profesor":
         st.markdown(f"#### 📄 {titulo_examen}")
         st.caption(f"Nivel: {nivel} | Total de ítems: {num_preguntas}")
         
-        for i in range(1, num_preguntas + 1):
-            st.markdown(f"**{i}.** *[Ejercicio de {nivel}]* Un cuerpo de masa $m = {i*2} \\text{ kg}$ experimenta una fuerza constante de ${i*10} \\text{ N}$. Calcule la aceleración del sistema.")
+for i in range(1, num_preguntas + 1):
+    m_val = i * 2
+    f_val = i * 10
+    st.markdown(f"**{i}.** *[Ejercicio de {nivel}]* Un cuerpo de masa $m = {m_val} \\text{{ kg}}$ experimenta una fuerza constante de ${f_val} \\text{{ N}}$. Calcule la aceleración del sistema.")
         
         st.button(" Exportar Guía a PDF / Imprimir", help="Próximamente exportación directa a PDF")
         

@@ -194,8 +194,9 @@ if st.sidebar.button(" Cambiar Perfil"):
 # ------------------------------------------
 #  MODO ESTUDIANTE: Práctica Paso a Paso
 # ------------------------------------------
+
 if st.session_state.user_role == "Estudiante":
-    st.markdown("##  Área de Práctica e Solucionarios Paso a Paso")
+    st.markdown("##  Área de Práctica y Solucionarios Paso a Paso")
     st.info("Selecciona un tema para poner a prueba tus conocimientos y ver soluciones explicadas a detalle.")
     
     tema_estudiante = st.selectbox(
@@ -207,7 +208,6 @@ if st.session_state.user_role == "Estudiante":
         st.markdown("###  Problema de Práctica")
         st.write("**Enunciado:** Un automóvil parte del reposo y acelera a razón constante de $2.5 \\text{ m/s}^2$ durante $8 \\text{ s}$. ¿Cuál es la distancia total recorrida?")
         
-        # Opciones para el usuario
         respuesta = st.radio("Elige tu respuesta:", ["80 metros", "100 metros", "160 metros", "64 metros"])
         
         col_btn1, col_btn2 = st.columns([1, 4])
@@ -234,16 +234,13 @@ if st.session_state.user_role == "Estudiante":
             $$d = 0 + 1.25 \\times 64 = 100 \\text{ m}$$
             """)
 
-# ------------------------------------------
-#  MODO PROFESOR: Generación de Evaluaciones
-# ------------------------------------------
 elif st.session_state.user_role == "Profesor":
     st.markdown("##  Panel de Control de Docente")
     st.info("Diseña exámenes personalizados y genera guías de trabajo para tus clases.")
     
     tab1, tab2 = st.tabs([" Generador de Exámenes", " Registro de Asistencia y Calificaciones"])
     
-   with tab1:
+    with tab1:
         st.markdown("### Configuración de la Evaluación")
         col_prof1, col_prof2 = st.columns(2)
         with col_prof1:
@@ -255,7 +252,7 @@ elif st.session_state.user_role == "Profesor":
             
         st.markdown("---")
         st.markdown("### Vista Previa del Material")
-        st.markdown(f"####  {titulo_examen}")
+        st.markdown(f"#### 📄 {titulo_examen}")
         st.caption(f"Nivel: {nivel} | Total de ítems: {num_preguntas}")
         
         for i in range(1, num_preguntas + 1):
@@ -264,6 +261,10 @@ elif st.session_state.user_role == "Profesor":
             st.markdown(f"**{i}.** *[Ejercicio de {nivel}]* Un cuerpo de masa $m = {m_val} \\text{{ kg}}$ experimenta una fuerza constante de ${f_val} \\text{{ N}}$. Calcule la aceleración del sistema.")
         
         st.button(" Exportar Guía a PDF / Imprimir", help="Próximamente exportación directa a PDF")
+
+    with tab2:
+        st.markdown("### Registro de Asistencia y Evaluaciones")
+        st.write("Módulo para seguimiento del grupo y control de entregas de laboratorio.")
         
 # ------------------------------------------------------------------------------
 # 3. ENCABEZADO Y BUSCADOR RÁPIDO

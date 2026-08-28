@@ -144,6 +144,49 @@ def generar_pdf_historial(historial):
     buffer.seek(0)
     return buffer
 
+# --- SELECCIÓN DE ROL / PORTADA DE BIENVENIDA ---
+if "user_role" not in st.session_state:
+    st.session_state.user_role = None
+
+if st.session_state.user_role is None:
+    # Encabezado principal estilo neón
+    st.markdown("""
+        <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 25px;">
+            <h1 style="color: #38bdf8; font-family: 'Courier New', monospace; font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">⚡ PHYSIKAL STUDIO PRO</h1>
+            <p style="color: #94a3b8; font-size: 1.1rem; margin: 0;">Plataforma Interactiva para el Cálculo Científico, Física Avanzada y Simulaciones</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    col_img1, col_img2, col_img3 = st.columns([1, 2, 1])
+    with col_img2:
+        try:
+            st.image("logo.png", use_container_width=True)
+        except Exception:
+            pass
+
+    st.markdown("<h3 style='text-align: center; color: #e2e8f0; margin-top: 20px;'>🎯 Para comenzar, selecciona tu perfil:</h3>", unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.info("###  Modo Estudiante\nAccede a calculadoras paso a paso, solucionarios interactivos y herramientas de práctica.")
+        if st.button("Ingresar como Estudiante", use_container_width=True, type="primary"):
+            st.session_state.user_role = "Estudiante"
+            st.rerun()
+
+    with col2:
+        st.success("###  Modo Profesor\nDiseña problemas personalizados, genera reportes en PDF y recursos para laboratorio.")
+        if st.button("Ingresar como Profesor", use_container_width=True):
+            st.session_state.user_role = "Profesor"
+            st.rerun()
+
+    st.stop()  # Detiene la carga hasta que elijan rol
+
+# Mostrar el perfil en la barra lateral
+st.sidebar.markdown(f" Perfil activo: **{st.session_state.user_role}**")
+if st.sidebar.button(" Cambiar Perfil"):
+    st.session_state.user_role = None
+    st.rerun()
+    
 # ------------------------------------------------------------------------------
 # 3. ENCABEZADO Y BUSCADOR RÁPIDO
 # ------------------------------------------------------------------------------

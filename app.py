@@ -243,7 +243,7 @@ elif st.session_state.user_role == "Profesor":
     
     tab1, tab2 = st.tabs([" Generador de Exámenes", " Registro de Asistencia y Calificaciones"])
     
-    with tab1:
+   with tab1:
         st.markdown("### Configuración de la Evaluación")
         col_prof1, col_prof2 = st.columns(2)
         with col_prof1:
@@ -255,15 +255,15 @@ elif st.session_state.user_role == "Profesor":
             
         st.markdown("---")
         st.markdown("### Vista Previa del Material")
-        st.markdown(f"#### 📄 {titulo_examen}")
+        st.markdown(f"####  {titulo_examen}")
         st.caption(f"Nivel: {nivel} | Total de ítems: {num_preguntas}")
         
-for i in range(1, num_preguntas + 1):
+        for i in range(1, num_preguntas + 1):
             m_val = i * 2
             f_val = i * 10
             st.markdown(f"**{i}.** *[Ejercicio de {nivel}]* Un cuerpo de masa $m = {m_val} \\text{{ kg}}$ experimenta una fuerza constante de ${f_val} \\text{{ N}}$. Calcule la aceleración del sistema.")
         
-        st.button("📥 Exportar Guía a PDF / Imprimir", help="Próximamente exportación directa a PDF")
+        st.button(" Exportar Guía a PDF / Imprimir", help="Próximamente exportación directa a PDF")
         
 # ------------------------------------------------------------------------------
 # 3. ENCABEZADO Y BUSCADOR RÁPIDO

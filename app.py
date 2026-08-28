@@ -152,7 +152,7 @@ if st.session_state.user_role is None:
     # Encabezado principal estilo neón
     st.markdown("""
         <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25); border-radius: 16px; padding: 30px; text-align: center; margin-bottom: 25px;">
-            <h1 style="color: #38bdf8; font-family: 'Courier New', monospace; font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;">⚡ PHYSIKAL STUDIO PRO</h1>
+            <h1 style="color: #38bdf8; font-family: 'Courier New', monospace; font-size: 2.5rem; font-weight: bold; margin-bottom: 5px;"> PHYSIKAL STUDIO PRO</h1>
             <p style="color: #94a3b8; font-size: 1.1rem; margin: 0;">Plataforma Interactiva para el Cálculo Científico, Física Avanzada y Simulaciones</p>
         </div>
     """, unsafe_allow_html=True)
@@ -164,7 +164,7 @@ if st.session_state.user_role is None:
         except Exception:
             pass
 
-    st.markdown("<h3 style='text-align: center; color: #e2e8f0; margin-top: 20px;'>🎯 Para comenzar, selecciona tu perfil:</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: #e2e8f0; margin-top: 20px;'> Para comenzar, selecciona tu perfil:</h3>", unsafe_allow_html=True)
     
     col1, col2 = st.columns(2)
     with col1:

@@ -186,7 +186,83 @@ st.sidebar.markdown(f" Perfil activo: **{st.session_state.user_role}**")
 if st.sidebar.button(" Cambiar Perfil"):
     st.session_state.user_role = None
     st.rerun()
+
+# ==========================================
+# SECCIÓN MODOS DE USUARIO: ESTUDIANTE / PROFESOR
+# ==========================================
+
+# ------------------------------------------
+#  MODO ESTUDIANTE: Práctica Paso a Paso
+# ------------------------------------------
+if st.session_state.user_role == "Estudiante":
+    st.markdown("##  Área de Práctica e Solucionarios Paso a Paso")
+    st.info("Selecciona un tema para poner a prueba tus conocimientos y ver soluciones explicadas a detalle.")
     
+    tema_estudiante = st.selectbox(
+        " Selecciona la materia o módulo de práctica:",
+        ["Cinemática: MRU y MRUA", "Dinámica: Leyes de Newton", "Trabajo y Energía"]
+    )
+    
+    if tema_estudiante == "Cinemática: MRU y MRUA":
+        st.markdown("###  Problema de Práctica")
+        st.write("**Enunciado:** Un automóvil parte del reposo y acelera a razón constante de $2.5 \\text{ m/s}^2$ durante $8 \\text{ s}$. ¿Cuál es la distancia total recorrida?")
+        
+        # Opciones para el usuario
+        respuesta = st.radio("Elige tu respuesta:", ["80 metros", "100 metros", "160 metros", "64 metros"])
+        
+        col_btn1, col_btn2 = st.columns([1, 4])
+        with col_btn1:
+            if st.button("Verificar Respuesta", type="primary"):
+                if respuesta == "100 metros":
+                    st.success(" ¡Correcto! La distancia recorrida es $100 \\text{ m}$.")
+                else:
+                    st.error(" Respuesta incorrecta. Inténtalo de nuevo o revisa el solucionario.")
+        
+        with st.expander(" Ver Solucionario Paso a Paso"):
+            st.markdown("""
+            **Paso 1: Identificar datos e incógnitas**
+            * Velocidad inicial ($v_0$) = $0 \\text{ m/s}$ (parte del reposo)
+            * Aceleración ($a$) = $2.5 \\text{ m/s}^2$
+            * Tiempo ($t$) = $8 \\text{ s}$
+            * Distancia ($d$) = $?$
+
+            **Paso 2: Seleccionar la fórmula adecuada**
+            $$d = v_0 t + \\frac{1}{2} a t^2$$
+
+            **Paso 3: Sustituir valores**
+            $$d = (0)(8) + \\frac{1}{2} (2.5) (8)^2$$
+            $$d = 0 + 1.25 \\times 64 = 100 \\text{ m}$$
+            """)
+
+# ------------------------------------------
+#  MODO PROFESOR: Generación de Evaluaciones
+# ------------------------------------------
+elif st.session_state.user_role == "Profesor":
+    st.markdown("##  Panel de Control de Docente")
+    st.info("Diseña exámenes personalizados y genera guías de trabajo para tus clases.")
+    
+    tab1, tab2 = st.tabs([" Generador de Exámenes", " Registro de Asistencia y Calificaciones"])
+    
+    with tab1:
+        st.markdown("### Configuración de la Evaluación")
+        col_prof1, col_prof2 = st.columns(2)
+        with col_prof1:
+            titulo_examen = st.text_input("Título de la prueba/guía:", "Examen Parcial de Física I")
+            nivel = st.selectbox("Nivel educativo:", ["Secundaria", "Universidad - Física General", "Universidad - Avanzado"])
+        with col_prof2:
+            num_preguntas = st.number_input("Número de ejercicios a incluir:", min_value=1, max_value=20, value=5)
+            incluir_solucionario = st.checkbox("Incluir clave de respuestas al final", value=True)
+            
+        st.markdown("---")
+        st.markdown("### Vista Previa del Material")
+        st.markdown(f"#### 📄 {titulo_examen}")
+        st.caption(f"Nivel: {nivel} | Total de ítems: {num_preguntas}")
+        
+        for i in range(1, num_preguntas + 1):
+            st.markdown(f"**{i}.** *[Ejercicio de {nivel}]* Un cuerpo de masa $m = {i*2} \\text{ kg}$ experimenta una fuerza constante de ${i*10} \\text{ N}$. Calcule la aceleración del sistema.")
+        
+        st.button(" Exportar Guía a PDF / Imprimir", help="Próximamente exportación directa a PDF")
+        
 # ------------------------------------------------------------------------------
 # 3. ENCABEZADO Y BUSCADOR RÁPIDO
 # ------------------------------------------------------------------------------

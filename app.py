@@ -75,13 +75,72 @@ user = st.session_state["user_info"]
 
 # --- BLOQUE FALTANTE: Si NO hay usuario, muestra el botón y detiene la ejecución ---
 if not user:
-    st.title(" Bienvenido a PhysiKal Studio Pro")
-    st.write("Inicia sesión con tu cuenta de Google para acceder a las herramientas.")
-    
-    auth_url = get_google_auth_url()
-    st.link_button(" Iniciar sesión con Google", auth_url, type="primary")
-    
-    st.stop()  # Detiene la ejecución para que no cargue la app sin haber iniciado sesión
+    # Estilos CSS para el fondo y la tarjeta centrada
+    st.markdown("""
+        <style>
+        /* Fondo con degradado moderno */
+        .stApp {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+        }
+        
+        /* Ocultar la barra lateral cuando no hay sesión */
+        [data-testid="stSidebar"] {
+            display: none;
+        }
+
+        /* Estilo del botón de Google */
+        .google-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+            margin-top: 15px;
+        }
+        .google-btn:hover {
+            background-color: #f3f4f6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            color: #111827;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # Estructura en columnas para centrar horizontalmente
+    col1, col2, col3 = st.columns([1, 2, 1])
+
+    with col2:
+        st.write("##")  # Espaciado vertical
+        st.write("##")
+        
+        # Tarjeta contenedora centrada
+        with st.container(border=True):
+            st.markdown("<h1 style='text-align: center; color: #ffffff;'>⚡ PhysiKal Studio Pro</h1>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 16px;'>Inicia sesión con tu cuenta de Google para ingresar a la plataforma.</p>", unsafe_allow_html=True)
+            st.markdown("---")
+            
+            auth_url = get_google_auth_url()
+            
+            # Botón centrado con icono de Google
+            st.markdown(f'''
+                <div style="text-align: center;">
+                    <a href="{auth_url}" target="_self" class="google-btn">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" style="margin-right: 10px; vertical-align: middle;">
+                        Iniciar sesión con Google
+                    </a>
+                </div>
+            ''', unsafe_allow_html=True)
+            
+            st.write("##")
+
+    st.stop()
 
 # Si SI hay usuario, muestra su foto/email en la barra lateral
 with st.sidebar:

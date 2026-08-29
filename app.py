@@ -75,11 +75,11 @@ user = st.session_state["user_info"]
 
 # --- BLOQUE FALTANTE: Si NO hay usuario, muestra el botón y detiene la ejecución ---
 if not user:
-    st.title("⚡ Bienvenido a PhysiKal Studio Pro")
+    st.title(" Bienvenido a PhysiKal Studio Pro")
     st.write("Inicia sesión con tu cuenta de Google para acceder a las herramientas.")
     
     auth_url = get_google_auth_url()
-    st.link_button("🌐 Iniciar sesión con Google", auth_url, type="primary")
+    st.link_button(" Iniciar sesión con Google", auth_url, type="primary")
     
     st.stop()  # Detiene la ejecución para que no cargue la app sin haber iniciado sesión
 

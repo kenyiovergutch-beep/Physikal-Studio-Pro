@@ -24,9 +24,6 @@ import streamlit as st
 import urllib.parse
 import requests
 
-# 1. SIEMPRE PRIMERO: Configuración de la página
-st.set_page_config(page_title="PhysiKal Studio Pro", page_icon="", layout="wide")
-
 # 2. AQUÍ INSERTA EL CÓDIGO DE AUTENTICACIÓN (Punto 1)
 try:
     oauth_config = st.secrets["google_oauth"]
@@ -74,6 +71,29 @@ if "code" in query_params and st.session_state["user_info"] is None:
 
 user = st.session_state["user_info"]
 
+user = st.session_state["user_info"]
+
+# --- BLOQUE FALTANTE: Si NO hay usuario, muestra el botón y detiene la ejecución ---
+if not user:
+    st.title("⚡ Bienvenido a PhysiKal Studio Pro")
+    st.write("Inicia sesión con tu cuenta de Google para acceder a las herramientas.")
+    
+    auth_url = get_google_auth_url()
+    st.link_button("🌐 Iniciar sesión con Google", auth_url, type="primary")
+    
+    st.stop()  # Detiene la ejecución para que no cargue la app sin haber iniciado sesión
+
+# Si SI hay usuario, muestra su foto/email en la barra lateral
+with st.sidebar:
+    if "picture" in user:
+        st.image(user["picture"], width=60)
+    st.write(f"**{user.get('name', 'Usuario')}**")
+    st.write(f"*{user.get('email', '')}*")
+    
+    if st.button("Cerrar Sesión"):
+        st.session_state["user_info"] = None
+        st.rerun()
+        
 # 3. AHORA TUS ESTILOS PERSONALIZADOS (CSS, colores, etc.)
 # st.markdown("<style>...</style>", unsafe_allow_html=True)
 # Inicializar sesión de tema si no existe

@@ -20,6 +20,62 @@ st.set_page_config(
     layout="wide"
 )
 
+import streamlit as st
+import urllib.parse
+import requests
+
+# 1. SIEMPRE PRIMERO: Configuración de la página
+st.set_page_config(page_title="PhysiKal Studio Pro", page_icon="", layout="wide")
+
+# 2. AQUÍ INSERTA EL CÓDIGO DE AUTENTICACIÓN (Punto 1)
+try:
+    oauth_config = st.secrets["google_oauth"]
+except Exception:
+    st.error("Faltan las credenciales en Secrets.")
+    st.stop()
+
+def get_google_auth_url():
+    params = {
+        "client_id": oauth_config["client_id"],
+        "redirect_uri": oauth_config["redirect_uri"],
+        "response_type": "code",
+        "scope": "openid email profile",
+        "access_type": "online",
+        "prompt": "select_account"
+    }
+    return f"https://accounts.google.com/o/oauth2/v2/auth?{urllib.parse.urlencode(params)}"
+
+if "user_info" not in st.session_state:
+    st.session_state["user_info"] = None
+
+query_params = st.query_params
+if "code" in query_params and st.session_state["user_info"] is None:
+    code = query_params["code"]
+    token_url = "https://oauth2.googleapis.com/token"
+    data = {
+        "code": code,
+        "client_id": oauth_config["client_id"],
+        "client_secret": oauth_config["client_secret"],
+        "redirect_uri": oauth_config["redirect_uri"],
+        "grant_type": "authorization_code",
+    }
+    response = requests.post(token_url, data=data)
+    if response.status_code == 200:
+        tokens = response.json()
+        access_token = tokens.get("access_token")
+        user_info_resp = requests.get(
+            "https://www.googleapis.com/oauth2/v2/userinfo",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        if user_info_resp.status_code == 200:
+            st.session_state["user_info"] = user_info_resp.json()
+            st.query_params.clear()
+            st.rerun()
+
+user = st.session_state["user_info"]
+
+# 3. AHORA TUS ESTILOS PERSONALIZADOS (CSS, colores, etc.)
+# st.markdown("<style>...</style>", unsafe_allow_html=True)
 # Inicializar sesión de tema si no existe
 if "tema" not in st.session_state:
     st.session_state.tema = "Oscuro"

@@ -20,11 +20,10 @@ st.set_page_config(
     layout="wide"
 )
 
-import streamlit as st
 import urllib.parse
 import requests
 
-# 2. AQUÍ INSERTA EL CÓDIGO DE AUTENTICACIÓN (Punto 1)
+# Carga de credenciales desde Secrets
 try:
     oauth_config = st.secrets["google_oauth"]
 except Exception:
@@ -45,6 +44,33 @@ def get_google_auth_url():
 if "user_info" not in st.session_state:
     st.session_state["user_info"] = None
 
+# Procesar código devuelto por Google
+query_params = st.query_params
+
+if "code" in query_params and st.session_state["user_info"] is None:
+    code = query_params["code"]
+    token_url = "https://oauth2.googleapis.com/token"
+    data = {
+        "code": code,
+        "client_id": oauth_config["client_id"],
+        "client_secret": oauth_config["client_secret"],
+        "redirect_uri": oauth_config["redirect_uri"],
+        "grant_type": "authorization_code",
+    }
+    response = requests.post(token_url, data=data)
+    tokens = response.json()
+    
+    if "access_token" in tokens:
+        user_info_resp = requests.get(
+            "https://www.googleapis.com/oauth2/v2/userinfo",
+            headers={"Authorization": f"Bearer {tokens['access_token']}"}
+        )
+        if user_info_resp.status_code == 200:
+            st.session_state["user_info"] = user_info_resp.json()
+            st.query_params.clear()
+            st.rerun()
+
+user = st.session_state["user_info"]
 query_params = st.query_params
 if "code" in query_params and st.session_state["user_info"] is None:
     code = query_params["code"]

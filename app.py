@@ -41,17 +41,18 @@ def get_google_auth_url():
     }
     return f"https://accounts.google.com/o/oauth2/v2/auth?{urllib.parse.urlencode(params)}"
 
+# ------------------------------------------------------------------------------
+# PROCESAR CÓDIGO DE AUTENTICACIÓN
+# ------------------------------------------------------------------------------
 if "user_info" not in st.session_state:
     st.session_state["user_info"] = None
 
-# Procesar código devuelto por Google
-query_params = st.query_params
+auth_code = st.query_params.get("code")
 
-if "code" in query_params and st.session_state["user_info"] is None:
-    code = query_params["code"]
+if auth_code and st.session_state["user_info"] is None:
     token_url = "https://oauth2.googleapis.com/token"
     data = {
-        "code": code,
+        "code": auth_code,
         "client_id": oauth_config["client_id"],
         "client_secret": oauth_config["client_secret"],
         "redirect_uri": oauth_config["redirect_uri"],
@@ -69,6 +70,8 @@ if "code" in query_params and st.session_state["user_info"] is None:
             st.session_state["user_info"] = user_info_resp.json()
             st.query_params.clear()
             st.rerun()
+
+# Definir la variable del usuario siempre
 user = st.session_state.get("user_info")
 
 # --- BLOQUE FALTANTE: Si NO hay usuario, muestra el botón y detiene la ejecución ---

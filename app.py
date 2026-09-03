@@ -69,35 +69,7 @@ if "code" in query_params and st.session_state["user_info"] is None:
             st.session_state["user_info"] = user_info_resp.json()
             st.query_params.clear()
             st.rerun()
-
-user = st.session_state["user_info"]
-query_params = st.query_params
-if "code" in query_params and st.session_state["user_info"] is None:
-    code = query_params["code"]
-    token_url = "https://oauth2.googleapis.com/token"
-    data = {
-        "code": code,
-        "client_id": oauth_config["client_id"],
-        "client_secret": oauth_config["client_secret"],
-        "redirect_uri": oauth_config["redirect_uri"],
-        "grant_type": "authorization_code",
-    }
-    response = requests.post(token_url, data=data)
-    if response.status_code == 200:
-        tokens = response.json()
-        access_token = tokens.get("access_token")
-        user_info_resp = requests.get(
-            "https://www.googleapis.com/oauth2/v2/userinfo",
-            headers={"Authorization": f"Bearer {access_token}"}
-        )
-        if user_info_resp.status_code == 200:
-            st.session_state["user_info"] = user_info_resp.json()
-            st.query_params.clear()
-            st.rerun()
-
-user = st.session_state["user_info"]
-
-user = st.session_state["user_info"]
+user = st.session_state.get("user_info")
 
 # --- BLOQUE FALTANTE: Si NO hay usuario, muestra el botón y detiene la ejecución ---
 if not user:
